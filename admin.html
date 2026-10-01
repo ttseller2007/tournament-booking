@@ -1,4 +1,133 @@
-<!doctype html><html lang="th"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Admin - Tournament</title><link rel="stylesheet" href="style.css"></head><body>
-<header><div class="brand">🔐 ADMIN</div><div class="sub">จัดการการสมัครและตรวจสอบสลิป</div></header><main>
-<section id="login" class="card"><h2>เข้าสู่ระบบ Admin</h2><input id="email" type="email" placeholder="Email"><input id="password" type="password" placeholder="Password"><button onclick="login()">เข้าสู่ระบบ</button><p id="loginMsg"></p></section>
-<section id="panel" class="hidden"><div class="stats"><div>13:00 <b id="s1300">0/8</b></div><div>15:00 <b id="s1500">0/8</b></div><div>17:00 <b id="s1700">0/8</b></div><div>19:00 <b id="s1900">0/8</b></div><div>21:00 <b id="s2100">0/8</b></div><div>23:00 <b id="s2300">0/8</b></div><div>01:00 <b id="s0100">0/8</b></div></div><div id="list"></div></section></main><script src="admin.js"></script></body></html>
+<!doctype html>
+<html lang="th">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Admin - Tournament</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<header>
+  <div class="brand">🔐 ADMIN</div>
+  <div class="sub">จัดการการสมัครและตรวจสอบสลิป</div>
+</header>
+
+<main>
+
+  <!-- LOGIN -->
+  <section id="login" class="card">
+    <h2>เข้าสู่ระบบ Admin</h2>
+
+    <input
+      id="email"
+      type="email"
+      placeholder="Email"
+      autocomplete="username"
+    >
+
+    <input
+      id="password"
+      type="password"
+      placeholder="Password"
+      autocomplete="current-password"
+    >
+
+    <button onclick="login()">
+      เข้าสู่ระบบ
+    </button>
+
+    <p id="loginMsg"></p>
+  </section>
+
+
+  <!-- ADMIN PANEL -->
+  <section id="panel" class="hidden">
+
+    <div class="card">
+      <div style="display:flex;gap:10px;align-items:end;flex-wrap:wrap;">
+
+        <div>
+          <label for="adminDate">
+            วันที่แข่งขัน
+          </label>
+
+          <input
+            id="adminDate"
+            type="date"
+          >
+        </div>
+
+        <button onclick="loadAdmin()">
+          🔄 รีเฟรช
+        </button>
+
+        <button onclick="logout()">
+          ออกจากระบบ
+        </button>
+
+      </div>
+    </div>
+
+
+    <!-- STATS -->
+    <div class="stats">
+
+      <div>
+        13:00
+        <b id="s1300">0/8</b>
+      </div>
+
+      <div>
+        15:00
+        <b id="s1500">0/8</b>
+      </div>
+
+      <div>
+        17:00
+        <b id="s1700">0/8</b>
+      </div>
+
+      <div>
+        19:00
+        <b id="s1900">0/8</b>
+      </div>
+
+      <div>
+        21:00
+        <b id="s2100">0/8</b>
+      </div>
+
+      <div>
+        23:00
+        <b id="s2300">0/8</b>
+      </div>
+
+      <div>
+        01:00
+        <b id="s0100">0/8</b>
+      </div>
+
+    </div>
+
+
+    <!-- APPLICATION LIST -->
+    <div id="list"></div>
+
+  </section>
+
+</main>
+
+
+<!-- SUPABASE -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<!-- PROJECT CONFIG -->
+<script src="config.js"></script>
+
+<!-- ADMIN SCRIPT -->
+<script src="admin.js"></script>
+
+</body>
+</html>
