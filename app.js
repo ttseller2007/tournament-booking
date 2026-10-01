@@ -1,0 +1,9 @@
+const times=["13:00","15:00","17:00","19:00","21:00","23:00","01:00"];let selected=null;
+const dateEl=document.getElementById("date"); dateEl.value=new Date().toISOString().slice(0,10);
+function key(){return "tb_"+dateEl.value}
+function data(){return JSON.parse(localStorage.getItem(key())||"[]")}
+function save(x){localStorage.setItem(key(),JSON.stringify(x))}
+function render(){const d=data(),box=document.getElementById("slots");box.innerHTML="";times.forEach(t=>{const n=d.filter(x=>x.time===t&&x.status!=="rejected"&&x.status!=="withdrawn").length;box.innerHTML+=`<div class="slot" onclick="choose('${t}')"><div class="time">${t}</div><div class="count ${n>=8?"full":"open"}">${n}/8 ทีม • ${n>=8?"เต็ม":"เปิดรับสมัคร"}</div></div>`})}
+function choose(t){const n=data().filter(x=>x.time===t&&x.status!=="rejected"&&x.status!=="withdrawn").length;if(n>=8)return alert("รอบนี้เต็มแล้ว");selected=t;document.getElementById("chosen").textContent=t;document.getElementById("formBox").classList.remove("hidden");scrollTo(0,document.body.scrollHeight)}
+async function submitApplication(){const gameName=document.getElementById("gameName").value.trim(),lineId=document.getElementById("lineId").value.trim(),file=document.getElementById("slip").files[0];if(!selected||!gameName||!lineId||!file)return alert("กรอกข้อมูลและแนบสลิปให้ครบ");const d=data(),n=d.filter(x=>x.time===selected&&x.status!=="rejected"&&x.status!=="withdrawn").length;if(n>=8)return alert("รอบนี้เต็มแล้ว");const reader=new FileReader();reader.onload=()=>{d.push({id:Date.now(),date:dateEl.value,time:selected,gameName,lineId,slip:reader.result,status:"pending"});save(d);document.getElementById("msg").textContent="ส่งสมัครแล้ว • รอตรวจสอบสลิป";document.getElementById("gameName").value="";document.getElementById("lineId").value="";document.getElementById("slip").value="";render()};reader.readAsDataURL(file)}
+dateEl.addEventListener("change",render);render();

@@ -1,0 +1,8 @@
+<!doctype html><html lang="th"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Tournament Booking</title><link rel="stylesheet" href="style.css"></head><body>
+<header><div class="brand">🏆 TOURNAMENT</div><div class="sub">รับ 8 ทีม / รอบ • สมัคร 40 บาท • แชมป์ 200 บาท</div></header>
+<main><section class="hero"><h1>จองรอบการแข่งขัน</h1><p>เลือกเวลาที่ต้องการสมัคร แล้วกรอกข้อมูลทีมและแนบสลิป</p></section>
+<section><label>วันที่แข่งขัน</label><input id="date" type="date"></section><div id="slots" class="grid"></div>
+<section id="formBox" class="card hidden"><h2>สมัครแข่งขัน <span id="chosen"></span></h2>
+<input id="gameName" placeholder="ชื่อในเกม"><input id="lineId" placeholder="ID LINE"><label>สลิปการโอนเงิน</label><input id="slip" type="file" accept="image/*">
+<button onclick="submitApplication()">ส่งสมัคร</button><p id="msg"></p></section></main>
+<script src="app.js"></script></body></html>
