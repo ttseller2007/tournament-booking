@@ -2,224 +2,536 @@
 <html lang="th">
 
 <head>
-
   <meta charset="utf-8">
 
   <meta
     name="viewport"
-    content="width=device-width,initial-scale=1"
+    content="width=device-width,initial-scale=1,viewport-fit=cover"
   >
 
-  <title>Admin - Tournament</title>
+  <meta
+    name="theme-color"
+    content="#0f172a"
+  >
 
-  <link rel="stylesheet" href="style.css">
+  <title>Tournament Booking</title>
+
+  <link
+    rel="preconnect"
+    href="https://fonts.googleapis.com"
+  >
+
+  <link
+    rel="preconnect"
+    href="https://fonts.gstatic.com"
+    crossorigin
+  >
+
+  <link
+    href="https://fonts.googleapis.com/css2?family=Kanit:wght@400;500;600;700&display=swap"
+    rel="stylesheet"
+  >
+
+  <link
+    rel="stylesheet"
+    href="style.css"
+  >
 
 </head>
 
 
 <body>
 
-<header>
 
-  <div class="brand">
-    🔐 ADMIN
+<header class="topbar">
+
+  <div class="brand-wrap">
+
+    <div class="brand-icon">
+      🏆
+    </div>
+
+    <div>
+
+      <div class="brand">
+        TOURNAMENT
+      </div>
+
+      <div class="brand-sub">
+        ระบบจองรอบการแข่งขัน
+      </div>
+
+    </div>
+
   </div>
 
-  <div class="sub">
-    จัดการการสมัครและตรวจสอบสลิป
+
+  <div class="top-pill">
+    รับสูงสุด 8 ทีม / รอบ
   </div>
 
 </header>
 
 
+
 <main>
 
-  <!-- LOGIN -->
 
-  <section id="login" class="card">
+  <!-- HERO -->
 
-    <h2>
-      เข้าสู่ระบบ Admin
-    </h2>
+  <section class="hero">
 
-    <input
-      id="email"
-      type="email"
-      placeholder="Email"
-      autocomplete="username"
-    >
+    <div class="hero-badge">
+      ⚡ สมัครง่าย • ตรวจสอบสลิปโดยแอดมิน
+    </div>
 
-    <input
-      id="password"
-      type="password"
-      placeholder="Password"
-      autocomplete="current-password"
-    >
 
-    <button onclick="login()">
-      เข้าสู่ระบบ
-    </button>
+    <h1>
 
-    <p id="loginMsg"></p>
+      จองรอบการแข่งขัน<br>
+
+      <span>
+        แล้วลุยให้สุด!
+      </span>
+
+    </h1>
+
+
+    <p>
+      เลือกวันที่และเวลาที่ต้องการ
+      จากนั้นกรอกข้อมูลทีมและแนบสลิปการโอนเงิน
+    </p>
+
+
+    <div class="prize-row">
+
+
+      <div class="info-card">
+
+        <span>
+          ค่าสมัคร
+        </span>
+
+        <strong>
+          40 บาท
+        </strong>
+
+      </div>
+
+
+
+      <div class="info-card highlight">
+
+        <span>
+          รางวัลแชมป์
+        </span>
+
+        <strong>
+          200 บาท
+        </strong>
+
+      </div>
+
+
+
+      <div class="info-card">
+
+        <span>
+          จำนวนทีม
+        </span>
+
+        <strong>
+          8 ทีม / รอบ
+        </strong>
+
+      </div>
+
+
+    </div>
 
   </section>
 
 
-  <!-- ADMIN PANEL -->
 
-  <section
-    id="panel"
-    class="hidden"
-  >
+  <!-- DATE -->
 
+  <section class="card date-card">
 
-    <!-- DATE -->
+    <label for="date">
 
-    <div class="card">
+      📅 วันที่แข่งขัน
 
-      <div
-        style="
-          display:flex;
-          gap:10px;
-          align-items:end;
-          flex-wrap:wrap;
-        "
-      >
-
-        <div>
-
-          <label for="adminDate">
-            วันที่แข่งขัน
-          </label>
-
-          <input
-            id="adminDate"
-            type="date"
-          >
-
-        </div>
+    </label>
 
 
-        <button onclick="loadAdmin()">
-          🔄 รีเฟรช
-        </button>
+    <input
+      id="date"
+      type="date"
+    >
+
+  </section>
 
 
-        <button onclick="logout()">
-          ออกจากระบบ
-        </button>
+
+  <!-- PAYMENT -->
+
+  <section class="card payment-card">
+
+
+    <div class="section-title">
+
+
+      <span class="section-icon">
+        💸
+      </span>
+
+
+      <div>
+
+        <h2>
+          ช่องทางชำระเงิน
+        </h2>
+
+
+        <p>
+          โอนค่าสมัคร 40 บาท แล้วแนบสลิปตอนสมัคร
+        </p>
 
       </div>
 
-    </div>
-
-
-    <!-- SLOT COUNTS -->
-
-    <div class="stats">
-
-      <button
-        class="time-btn active"
-        id="timeBtn1300"
-        onclick="selectTime('13:00')"
-      >
-        13:00
-        <b id="s1300">0/8</b>
-      </button>
-
-
-      <button
-        class="time-btn"
-        id="timeBtn1500"
-        onclick="selectTime('15:00')"
-      >
-        15:00
-        <b id="s1500">0/8</b>
-      </button>
-
-
-      <button
-        class="time-btn"
-        id="timeBtn1700"
-        onclick="selectTime('17:00')"
-      >
-        17:00
-        <b id="s1700">0/8</b>
-      </button>
-
-
-      <button
-        class="time-btn"
-        id="timeBtn1900"
-        onclick="selectTime('19:00')"
-      >
-        19:00
-        <b id="s1900">0/8</b>
-      </button>
-
-
-      <button
-        class="time-btn"
-        id="timeBtn2100"
-        onclick="selectTime('21:00')"
-      >
-        21:00
-        <b id="s2100">0/8</b>
-      </button>
-
-
-      <button
-        class="time-btn"
-        id="timeBtn2300"
-        onclick="selectTime('23:00')"
-      >
-        23:00
-        <b id="s2300">0/8</b>
-      </button>
-
-
-      <button
-        class="time-btn"
-        id="timeBtn0100"
-        onclick="selectTime('01:00')"
-      >
-        01:00
-        <b id="s0100">0/8</b>
-      </button>
 
     </div>
 
 
-    <!-- CURRENT SLOT -->
 
-    <div class="card">
+    <div class="bank-box">
 
-      <h2 id="selectedTimeTitle">
-        รายการรอตรวจสอบ • 13:00
+
+      <div class="bank-logo">
+        KTB
+      </div>
+
+
+      <div class="bank-info">
+
+
+        <small>
+          ธนาคารกรุงไทย
+        </small>
+
+
+        <strong>
+          เลขบัญชี 6180519935
+        </strong>
+
+
+      </div>
+
+
+    </div>
+
+
+
+    <div class="contact-box">
+
+
+      <span>
+        💬 ติดต่อสอบถาม LINE
+      </span>
+
+
+      <strong>
+        @752rfchb
+      </strong>
+
+
+    </div>
+
+
+  </section>
+
+
+
+  <!-- SELECT TIME -->
+
+  <section class="section-heading">
+
+
+    <div>
+
+      <h2>
+        เลือกเวลาการแข่งขัน
       </h2>
 
-      <p id="pendingInfo">
-        รายการที่รอ Admin ตรวจสอบสลิป
+
+      <p>
+        รอบที่ยังไม่เต็มสามารถกดเพื่อสมัครได้ทันที
       </p>
 
     </div>
 
 
-    <!-- APPLICATION LIST -->
+  </section>
 
-    <div id="list"></div>
+
+
+  <div
+    id="slots"
+    class="grid"
+  ></div>
+
+
+
+  <!-- APPLICATION FORM -->
+
+  <section
+    id="formBox"
+    class="card form-card hidden"
+  >
+
+
+    <div class="form-head">
+
+
+      <div>
+
+
+        <span class="form-label">
+          รอบที่เลือก
+        </span>
+
+
+        <h2>
+
+          สมัครแข่งขัน
+
+          <span id="chosen"></span>
+
+        </h2>
+
+
+      </div>
+
+
+      <div class="selected-badge">
+        SELECTED
+      </div>
+
+
+    </div>
+
+
+
+    <div class="notice">
+
+      🔒 ข้อมูลทีมของคุณจะไม่แสดงให้ผู้สมัครคนอื่นเห็น
+
+    </div>
+
+
+
+    <label for="gameName">
+
+      🎮 ชื่อในเกม
+
+    </label>
+
+
+    <input
+      id="gameName"
+      placeholder="กรอกชื่อในเกม"
+      maxlength="100"
+    >
+
+
+
+    <label for="lineId">
+
+      💬 ID LINE
+
+    </label>
+
+
+    <input
+      id="lineId"
+      placeholder="กรอก ID LINE"
+      maxlength="100"
+    >
+
+
+
+    <label for="slip">
+
+      🧾 สลิปการโอนเงิน
+
+    </label>
+
+
+    <div class="upload-hint">
+
+      รองรับ JPG, PNG, WEBP
+      ขนาดไม่เกิน 5 MB
+
+    </div>
+
+
+    <input
+      id="slip"
+      type="file"
+      accept="image/*"
+    >
+
+
+
+    <button
+      class="submit-btn"
+      onclick="submitApplication()"
+    >
+
+      🚀 ส่งสมัครแข่งขัน
+
+    </button>
+
+
+    <p id="msg"></p>
 
 
   </section>
 
+
+
+  <!-- HOW TO APPLY -->
+
+  <section class="steps">
+
+
+    <div class="section-heading">
+
+
+      <div>
+
+        <h2>
+          วิธีสมัคร
+        </h2>
+
+
+        <p>
+          ทำตาม 4 ขั้นตอนง่าย ๆ
+        </p>
+
+      </div>
+
+
+    </div>
+
+
+
+    <div class="step-grid">
+
+
+      <div class="step">
+
+        <b>
+          01
+        </b>
+
+        <span>
+          เลือกวันที่และเวลา
+        </span>
+
+      </div>
+
+
+
+      <div class="step">
+
+        <b>
+          02
+        </b>
+
+        <span>
+          โอนค่าสมัคร 40 บาท
+        </span>
+
+      </div>
+
+
+
+      <div class="step">
+
+        <b>
+          03
+        </b>
+
+        <span>
+          กรอกข้อมูลทีม + แนบสลิป
+        </span>
+
+      </div>
+
+
+
+      <div class="step">
+
+        <b>
+          04
+        </b>
+
+        <span>
+          รอแอดมินตรวจสอบ
+        </span>
+
+      </div>
+
+
+    </div>
+
+
+  </section>
+
+
 </main>
 
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<footer>
+
+
+  <div>
+    🏆 TOURNAMENT BOOKING
+  </div>
+
+
+  <div>
+
+    สอบถามเพิ่มเติม LINE:
+
+    <strong>
+      @752rfchb
+    </strong>
+
+  </div>
+
+
+</footer>
+
+
+
+<!-- SUPABASE -->
+
+<script
+  src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"
+></script>
+
+
+<!-- SUPABASE CONFIG -->
 
 <script src="config.js"></script>
 
-<script src="admin.js"></script>
+
+<!-- APPLICATION SYSTEM -->
+
+<script src="app.js"></script>
 
 
 </body>
