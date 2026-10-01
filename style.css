@@ -1335,3 +1335,52 @@ footer strong {
   }
 
 }
+/* =========================
+   ADMIN TIME BUTTONS
+========================= */
+
+.time-btn {
+  border: 1px solid #334155;
+  border-radius: 14px;
+  padding: 12px 14px;
+  background: #111827;
+  color: #e2e8f0;
+  min-width: 90px;
+  transition: .18s ease;
+}
+
+.time-btn b {
+  display: block;
+  margin-top: 3px;
+  font-size: 15px;
+}
+
+.time-btn:hover {
+  border-color: #818cf8;
+  transform: translateY(-1px);
+}
+
+.time-btn.active {
+  background: linear-gradient(
+    135deg,
+    #4f46e5,
+    #7c3aed
+  );
+
+  border-color: #818cf8;
+  color: white;
+}
+
+.empty-state {
+  text-align: center;
+  padding: 40px 20px;
+}
+
+.empty-state h3 {
+  margin: 8px 0 4px;
+}
+
+.empty-state p {
+  color: #64748b;
+  margin: 0;
+}
