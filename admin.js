@@ -8,62 +8,102 @@ const times = [
   "01:00"
 ];
 
-const adminDate = document.getElementById("adminDate");
+
+const adminDate =
+  document.getElementById("adminDate");
+
+
+let selectedTime = "13:00";
+
 
 function localDateString() {
+
   const d = new Date();
 
-  const year = d.getFullYear();
-  const month = String(d.getMonth() + 1).padStart(2, "0");
-  const day = String(d.getDate()).padStart(2, "0");
+  const year =
+    d.getFullYear();
+
+  const month =
+    String(d.getMonth() + 1)
+      .padStart(2, "0");
+
+  const day =
+    String(d.getDate())
+      .padStart(2, "0");
 
   return `${year}-${month}-${day}`;
 }
 
-adminDate.value = localDateString();
+
+adminDate.value =
+  localDateString();
 
 
-// ============================
+// ========================================
 // LOGIN
-// ============================
+// ========================================
 
 async function login() {
-  const email = document
-    .getElementById("email")
-    .value
-    .trim();
 
-  const password = document
-    .getElementById("password")
-    .value;
+  const email =
+    document
+      .getElementById("email")
+      .value
+      .trim();
 
-  const msg = document.getElementById("loginMsg");
+
+  const password =
+    document
+      .getElementById("password")
+      .value;
+
+
+  const msg =
+    document
+      .getElementById("loginMsg");
+
 
   if (!email || !password) {
-    msg.textContent = "กรอก Email และ Password";
+
+    msg.textContent =
+      "กรอก Email และ Password";
+
     return;
   }
 
-  msg.textContent = "กำลังเข้าสู่ระบบ...";
+
+  msg.textContent =
+    "กำลังเข้าสู่ระบบ...";
+
 
   const { data, error } =
-    await window.sb.auth.signInWithPassword({
-      email,
-      password
-    });
+    await window.sb.auth
+      .signInWithPassword({
+
+        email,
+        password
+
+      });
+
 
   if (error) {
+
     console.error(error);
 
     msg.textContent =
-      "เข้าสู่ระบบไม่สำเร็จ: " + error.message;
+      "เข้าสู่ระบบไม่สำเร็จ: " +
+      error.message;
 
     return;
   }
 
-  const isAdmin = await checkAdmin();
+
+  const isAdmin =
+    await checkAdmin();
+
 
   if (!isAdmin) {
+
     await window.sb.auth.signOut();
 
     msg.textContent =
@@ -72,22 +112,29 @@ async function login() {
     return;
   }
 
+
   showPanel();
 }
 
 
-// ============================
+// ========================================
 // CHECK ADMIN
-// ============================
+// ========================================
 
 async function checkAdmin() {
+
   const {
     data: { user }
-  } = await window.sb.auth.getUser();
+  } =
+    await window.sb.auth.getUser();
+
 
   if (!user) {
+
     return false;
+
   }
+
 
   const { data, error } =
     await window.sb
@@ -96,73 +143,148 @@ async function checkAdmin() {
       .eq("user_id", user.id)
       .maybeSingle();
 
+
   if (error) {
+
     console.error(error);
+
     return false;
+
   }
+
 
   return !!data;
 }
 
 
-// ============================
-// SHOW ADMIN PANEL
-// ============================
+// ========================================
+// SHOW PANEL
+// ========================================
 
 function showPanel() {
+
   document
     .getElementById("login")
-    .classList.add("hidden");
+    .classList
+    .add("hidden");
+
 
   document
     .getElementById("panel")
-    .classList.remove("hidden");
+    .classList
+    .remove("hidden");
 
-  loadAdmin();
+
+  selectTime(selectedTime);
+
 }
 
 
-// ============================
+// ========================================
 // LOGOUT
-// ============================
+// ========================================
 
 async function logout() {
+
   await window.sb.auth.signOut();
+
 
   document
     .getElementById("panel")
-    .classList.add("hidden");
+    .classList
+    .add("hidden");
+
 
   document
     .getElementById("login")
-    .classList.remove("hidden");
+    .classList
+    .remove("hidden");
 
-  document.getElementById("loginMsg").textContent =
-    "ออกจากระบบแล้ว";
+
+  document
+    .getElementById("loginMsg")
+    .textContent =
+      "ออกจากระบบแล้ว";
 }
 
 
-// ============================
-// LOAD ADMIN DATA
-// ============================
+// ========================================
+// SELECT TIME
+// ========================================
+
+function selectTime(time) {
+
+  selectedTime =
+    time;
+
+
+  times.forEach(t => {
+
+    const button =
+      document.getElementById(
+        "timeBtn" +
+        t.replace(":", "")
+      );
+
+
+    if (!button) {
+
+      return;
+
+    }
+
+
+    button.classList.toggle(
+      "active",
+      t === selectedTime
+    );
+
+  });
+
+
+  document
+    .getElementById(
+      "selectedTimeTitle"
+    )
+    .textContent =
+      `รายการรอตรวจสอบ • ${selectedTime}`;
+
+
+  loadAdmin();
+
+}
+
+
+// ========================================
+// LOAD ADMIN
+// ========================================
 
 async function loadAdmin() {
-  const date = adminDate.value;
+
+  const date =
+    adminDate.value;
+
 
   if (!date) {
+
     return;
+
   }
 
+
   await loadStats(date);
+
   await loadApplications(date);
+
 }
 
 
-// ============================
-// LOAD COUNTS
-// ============================
+// ========================================
+// LOAD STATS
+// ========================================
 
 async function loadStats(date) {
+
   const { data, error } =
     await window.sb.rpc(
       "get_tournament_slots",
@@ -171,48 +293,76 @@ async function loadStats(date) {
       }
     );
 
+
   if (error) {
+
     console.error(error);
+
     return;
+
   }
 
+
   times.forEach(time => {
-    const slot = (data || []).find(
-      x => String(x.match_time).slice(0, 5) === time
-    );
+
+    const slot =
+      (data || []).find(
+        x =>
+          String(x.match_time)
+            .slice(0, 5) === time
+      );
+
 
     const id =
-      "s" + time.replace(":", "");
+      "s" +
+      time.replace(":", "");
 
-    const el = document.getElementById(id);
+
+    const el =
+      document.getElementById(id);
+
 
     if (!el) {
+
       return;
+
     }
 
+
     if (!slot) {
-      el.textContent = "0/8";
+
+      el.textContent =
+        "0/8";
+
       return;
+
     }
+
 
     el.textContent =
       `${Number(slot.team_count || 0)}/${slot.max_teams}`;
+
   });
+
 }
 
 
-// ============================
+// ========================================
 // LOAD APPLICATIONS
-// ============================
+// ========================================
 
 async function loadApplications(date) {
-  const list = document.getElementById("list");
+
+  const list =
+    document.getElementById("list");
+
 
   list.innerHTML = `
     <div class="card">
-      กำลังโหลดรายการสมัคร...
+      กำลังโหลดรายการ...
     </div>
   `;
+
 
   const { data, error } =
     await window.sb
@@ -230,41 +380,109 @@ async function loadApplications(date) {
           match_time
         )
       `)
-      .eq("tournaments.match_date", date)
-      .order("created_at", {
-        ascending: false
-      });
+      .eq(
+        "tournaments.match_date",
+        date
+      )
+      .order(
+        "created_at",
+        {
+          ascending: false
+        }
+      );
+
 
   if (error) {
+
     console.error(error);
 
+
     list.innerHTML = `
       <div class="card">
-        <b>โหลดข้อมูลไม่สำเร็จ</b>
-        <p>${escapeHtml(error.message)}</p>
+
+        <b>
+          โหลดข้อมูลไม่สำเร็จ
+        </b>
+
+        <p>
+          ${escapeHtml(error.message)}
+        </p>
+
       </div>
     `;
 
     return;
   }
 
-  if (!data || data.length === 0) {
+
+  // ======================================
+  // เฉพาะรายการที่รอตรวจสอบ
+  // ======================================
+
+  const pendingRows =
+    (data || []).filter(item => {
+
+      const time =
+        item.tournaments
+          ? String(
+              item.tournaments.match_time
+            ).slice(0, 5)
+          : "";
+
+
+      return (
+        time === selectedTime &&
+        item.status === "pending"
+      );
+
+    });
+
+
+  document
+    .getElementById("pendingInfo")
+    .textContent =
+      `มี ${pendingRows.length} รายการรอตรวจสอบในรอบ ${selectedTime}`;
+
+
+  if (pendingRows.length === 0) {
+
     list.innerHTML = `
-      <div class="card">
-        ยังไม่มีรายการสมัครสำหรับวันที่ ${date}
+      <div class="card empty-state">
+
+        <div style="font-size:40px">
+          ✅
+        </div>
+
+        <h3>
+          ไม่มีรายการรอตรวจสอบ
+        </h3>
+
+        <p>
+          รอบ ${selectedTime}
+          ไม่มีรายการที่ต้องตรวจสอบแล้ว
+        </p>
+
       </div>
     `;
 
     return;
   }
+
 
   const rows = [];
 
-  for (const item of data) {
+
+  for (const item of pendingRows) {
+
     let slipUrl = "";
 
+
     if (item.slip_path) {
-      const { data: signedData, error: signedError } =
+
+      const {
+        data: signedData,
+        error: signedError
+      } =
         await window.sb.storage
           .from("slips")
           .createSignedUrl(
@@ -272,129 +490,204 @@ async function loadApplications(date) {
             600
           );
 
-      if (!signedError && signedData) {
-        slipUrl = signedData.signedUrl;
+
+      if (
+        !signedError &&
+        signedData
+      ) {
+
+        slipUrl =
+          signedData.signedUrl;
+
       }
+
     }
 
-    const time = item.tournaments
-      ? String(item.tournaments.match_time).slice(0, 5)
-      : "-";
+
+    const time =
+      item.tournaments
+        ? String(
+            item.tournaments.match_time
+          ).slice(0, 5)
+        : "-";
+
 
     rows.push({
+
       ...item,
+
       time,
+
       slipUrl
+
     });
+
   }
 
-  list.innerHTML = rows.map(renderApplication).join("");
+
+  list.innerHTML =
+    rows
+      .map(renderApplication)
+      .join("");
+
 }
 
 
-// ============================
+// ========================================
 // RENDER APPLICATION
-// ============================
+// ========================================
 
 function renderApplication(item) {
-  const statusText = {
-    pending: "รอตรวจสอบ",
-    approved: "ยืนยันแล้ว",
-    rejected: "ปฏิเสธ",
-    withdrawn: "ถอน/ยกเลิก"
-  };
 
-  const status =
-    statusText[item.status] || item.status;
+  const slipHtml =
+    item.slipUrl
+      ? `
 
-  const slipHtml = item.slipUrl
-    ? `
-      <div>
-        <p><b>สลิปการโอนเงิน</b></p>
+        <div>
 
-        <a
-          href="${escapeAttribute(item.slipUrl)}"
-          target="_blank"
-          rel="noopener"
-        >
-          <img
-            class="slip"
-            src="${escapeAttribute(item.slipUrl)}"
-            alt="สลิปการโอนเงิน"
-          >
-        </a>
+          <p>
+            <b>
+              🧾 สลิปการโอนเงิน
+            </b>
+          </p>
 
-        <p>
+
           <a
             href="${escapeAttribute(item.slipUrl)}"
             target="_blank"
             rel="noopener"
           >
-            🔍 เปิดดูสลิปขนาดใหญ่
+
+            <img
+              class="slip"
+              src="${escapeAttribute(item.slipUrl)}"
+              alt="สลิปการโอนเงิน"
+            >
+
           </a>
+
+
+          <p>
+
+            <a
+              href="${escapeAttribute(item.slipUrl)}"
+              target="_blank"
+              rel="noopener"
+            >
+              🔍 เปิดดูสลิปขนาดใหญ่
+            </a>
+
+          </p>
+
+        </div>
+
+      `
+      : `
+
+        <p>
+          ไม่พบไฟล์สลิป
         </p>
-      </div>
-    `
-    : `
-      <p>ไม่พบไฟล์สลิป</p>
-    `;
+
+      `;
+
 
   return `
+
     <div class="row">
 
       <h3>
-        ${escapeHtml(item.time)}
+        ⏰ ${escapeHtml(item.time)}
       </h3>
 
+
       <div>
-        <label>ชื่อในเกม</label>
+
+        <label>
+          ชื่อในเกม
+        </label>
 
         <input
           id="game-${item.id}"
           value="${escapeAttribute(item.game_name)}"
         >
+
       </div>
 
+
       <div>
-        <label>ID LINE</label>
+
+        <label>
+          ID LINE
+        </label>
 
         <input
           id="line-${item.id}"
           value="${escapeAttribute(item.line_id)}"
         >
+
       </div>
+
 
       <div>
-        <b>สถานะ:</b>
-        ${escapeHtml(status)}
+
+        <b>
+          สถานะ:
+        </b>
+
+        รอตรวจสอบ
+
       </div>
 
+
       ${slipHtml}
+
 
       <div class="actions">
 
         <button
           class="ok"
-          onclick="setStatus(${item.id}, 'approved')"
+          onclick="
+            setStatus(
+              ${item.id},
+              'approved'
+            )
+          "
         >
           ✅ ยืนยันสลิป
         </button>
 
+
         <button
-          onclick="setStatus(${item.id}, 'rejected')"
+          onclick="
+            setStatus(
+              ${item.id},
+              'rejected'
+            )
+          "
         >
           ❌ ปฏิเสธ
         </button>
 
+
         <button
           class="danger"
-          onclick="setStatus(${item.id}, 'withdrawn')"
+          onclick="
+            setStatus(
+              ${item.id},
+              'withdrawn'
+            )
+          "
         >
           🚫 ถอน/ยกเลิก
         </button>
 
+
         <button
-          onclick="saveEdit(${item.id})"
+          onclick="
+            saveEdit(
+              ${item.id}
+            )
+          "
         >
           💾 บันทึกข้อมูล
         </button>
@@ -402,101 +695,185 @@ function renderApplication(item) {
       </div>
 
     </div>
+
   `;
+
 }
 
 
-// ============================
-// CHANGE STATUS
-// ============================
+// ========================================
+// SET STATUS
+// ========================================
 
-async function setStatus(id, status) {
+async function setStatus(
+  id,
+  status
+) {
+
   const names = {
-    approved: "ยืนยันสลิป",
-    rejected: "ปฏิเสธ",
-    withdrawn: "ถอน/ยกเลิก"
+
+    approved:
+      "ยืนยันสลิป",
+
+    rejected:
+      "ปฏิเสธ",
+
+    withdrawn:
+      "ถอน/ยกเลิก"
+
   };
 
-  const answer = confirm(
-    `ต้องการ${names[status]}รายการนี้หรือไม่?`
-  );
+
+  const answer =
+    confirm(
+      `ต้องการ${names[status]}รายการนี้หรือไม่?`
+    );
+
 
   if (!answer) {
+
     return;
+
   }
+
 
   const { error } =
     await window.sb
       .from("applications")
       .update({
+
         status
+
       })
-      .eq("id", id);
+      .eq(
+        "id",
+        id
+      );
+
 
   if (error) {
+
     console.error(error);
+
 
     alert(
       "ดำเนินการไม่สำเร็จ: " +
       error.message
     );
 
+
     return;
+
   }
 
-  alert("บันทึกเรียบร้อยแล้ว");
+
+  // โหลดใหม่ทันที
+  // รายการที่ approve/reject/withdraw
+  // จะหายจากรายการรอตรวจสอบ
 
   await loadAdmin();
+
 }
 
 
-// ============================
-// EDIT GAME NAME / LINE ID
-// ============================
+// ========================================
+// SAVE EDIT
+// ========================================
 
 async function saveEdit(id) {
+
   const gameInput =
-    document.getElementById(`game-${id}`);
+    document.getElementById(
+      `game-${id}`
+    );
+
 
   const lineInput =
-    document.getElementById(`line-${id}`);
+    document.getElementById(
+      `line-${id}`
+    );
 
-  if (!gameInput || !lineInput) {
+
+  if (
+    !gameInput ||
+    !lineInput
+  ) {
+
     return;
+
   }
+
 
   const gameName =
     gameInput.value.trim();
 
+
   const lineId =
     lineInput.value.trim();
 
-  if (!gameName || !lineId) {
-    alert("กรอกชื่อในเกมและ LINE ID ให้ครบ");
+
+  if (
+    !gameName ||
+    !lineId
+  ) {
+
+    alert(
+      "กรอกชื่อในเกมและ LINE ID ให้ครบ"
+    );
+
     return;
+
   }
 
-  if (gameName.length > 100) {
-    alert("ชื่อในเกมยาวเกินไป");
+
+  if (
+    gameName.length > 100
+  ) {
+
+    alert(
+      "ชื่อในเกมยาวเกินไป"
+    );
+
     return;
+
   }
 
-  if (lineId.length > 100) {
-    alert("LINE ID ยาวเกินไป");
+
+  if (
+    lineId.length > 100
+  ) {
+
+    alert(
+      "LINE ID ยาวเกินไป"
+    );
+
     return;
+
   }
+
 
   const { error } =
     await window.sb
       .from("applications")
       .update({
-        game_name: gameName,
-        line_id: lineId
+
+        game_name:
+          gameName,
+
+        line_id:
+          lineId
+
       })
-      .eq("id", id);
+      .eq(
+        "id",
+        id
+      );
+
 
   if (error) {
+
     console.error(error);
+
 
     alert(
       "บันทึกไม่สำเร็จ: " +
@@ -504,17 +881,23 @@ async function saveEdit(id) {
     );
 
     return;
+
   }
 
-  alert("บันทึกข้อมูลเรียบร้อยแล้ว");
+
+  alert(
+    "บันทึกข้อมูลเรียบร้อยแล้ว"
+  );
+
 
   await loadAdmin();
+
 }
 
 
-// ============================
+// ========================================
 // DATE CHANGE
-// ============================
+// ========================================
 
 adminDate.addEventListener(
   "change",
@@ -522,44 +905,86 @@ adminDate.addEventListener(
 );
 
 
-// ============================
-// SECURITY HELPERS
-// ============================
+// ========================================
+// ESCAPE HTML
+// ========================================
 
 function escapeHtml(value) {
-  return String(value ?? "")
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;")
-    .replace(/"/g, "&quot;")
-    .replace(/'/g, "&#039;");
+
+  return String(
+    value ?? ""
+  )
+
+    .replace(
+      /&/g,
+      "&amp;"
+    )
+
+    .replace(
+      /</g,
+      "&lt;"
+    )
+
+    .replace(
+      />/g,
+      "&gt;"
+    )
+
+    .replace(
+      /"/g,
+      "&quot;"
+    )
+
+    .replace(
+      /'/g,
+      "&#039;"
+    );
+
 }
+
 
 function escapeAttribute(value) {
+
   return escapeHtml(value);
+
 }
 
 
-// ============================
-// CHECK EXISTING SESSION
-// ============================
+// ========================================
+// INITIALIZE
+// ========================================
 
 async function initAdmin() {
+
   const {
     data: { session }
-  } = await window.sb.auth.getSession();
+  } =
+    await window.sb.auth
+      .getSession();
+
 
   if (!session) {
+
     return;
+
   }
 
-  const isAdmin = await checkAdmin();
+
+  const isAdmin =
+    await checkAdmin();
+
 
   if (isAdmin) {
+
     showPanel();
+
   } else {
+
     await window.sb.auth.signOut();
+
   }
+
 }
+
 
 initAdmin();
