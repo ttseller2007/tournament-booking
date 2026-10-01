@@ -1,24 +1,46 @@
 <!doctype html>
 <html lang="th">
+
 <head>
+
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
+
+  <meta
+    name="viewport"
+    content="width=device-width,initial-scale=1"
+  >
+
   <title>Admin - Tournament</title>
+
   <link rel="stylesheet" href="style.css">
+
 </head>
+
 
 <body>
 
 <header>
-  <div class="brand">🔐 ADMIN</div>
-  <div class="sub">จัดการการสมัครและตรวจสอบสลิป</div>
+
+  <div class="brand">
+    🔐 ADMIN
+  </div>
+
+  <div class="sub">
+    จัดการการสมัครและตรวจสอบสลิป
+  </div>
+
 </header>
+
 
 <main>
 
   <!-- LOGIN -->
+
   <section id="login" class="card">
-    <h2>เข้าสู่ระบบ Admin</h2>
+
+    <h2>
+      เข้าสู่ระบบ Admin
+    </h2>
 
     <input
       id="email"
@@ -39,16 +61,33 @@
     </button>
 
     <p id="loginMsg"></p>
+
   </section>
 
 
   <!-- ADMIN PANEL -->
-  <section id="panel" class="hidden">
+
+  <section
+    id="panel"
+    class="hidden"
+  >
+
+
+    <!-- DATE -->
 
     <div class="card">
-      <div style="display:flex;gap:10px;align-items:end;flex-wrap:wrap;">
+
+      <div
+        style="
+          display:flex;
+          gap:10px;
+          align-items:end;
+          flex-wrap:wrap;
+        "
+      >
 
         <div>
+
           <label for="adminDate">
             วันที่แข่งขัน
           </label>
@@ -57,77 +96,132 @@
             id="adminDate"
             type="date"
           >
+
         </div>
+
 
         <button onclick="loadAdmin()">
           🔄 รีเฟรช
         </button>
+
 
         <button onclick="logout()">
           ออกจากระบบ
         </button>
 
       </div>
+
     </div>
 
 
-    <!-- STATS -->
+    <!-- SLOT COUNTS -->
+
     <div class="stats">
 
-      <div>
+      <button
+        class="time-btn active"
+        id="timeBtn1300"
+        onclick="selectTime('13:00')"
+      >
         13:00
         <b id="s1300">0/8</b>
-      </div>
+      </button>
 
-      <div>
+
+      <button
+        class="time-btn"
+        id="timeBtn1500"
+        onclick="selectTime('15:00')"
+      >
         15:00
         <b id="s1500">0/8</b>
-      </div>
+      </button>
 
-      <div>
+
+      <button
+        class="time-btn"
+        id="timeBtn1700"
+        onclick="selectTime('17:00')"
+      >
         17:00
         <b id="s1700">0/8</b>
-      </div>
+      </button>
 
-      <div>
+
+      <button
+        class="time-btn"
+        id="timeBtn1900"
+        onclick="selectTime('19:00')"
+      >
         19:00
         <b id="s1900">0/8</b>
-      </div>
+      </button>
 
-      <div>
+
+      <button
+        class="time-btn"
+        id="timeBtn2100"
+        onclick="selectTime('21:00')"
+      >
         21:00
         <b id="s2100">0/8</b>
-      </div>
+      </button>
 
-      <div>
+
+      <button
+        class="time-btn"
+        id="timeBtn2300"
+        onclick="selectTime('23:00')"
+      >
         23:00
         <b id="s2300">0/8</b>
-      </div>
+      </button>
 
-      <div>
+
+      <button
+        class="time-btn"
+        id="timeBtn0100"
+        onclick="selectTime('01:00')"
+      >
         01:00
         <b id="s0100">0/8</b>
-      </div>
+      </button>
+
+    </div>
+
+
+    <!-- CURRENT SLOT -->
+
+    <div class="card">
+
+      <h2 id="selectedTimeTitle">
+        รายการรอตรวจสอบ • 13:00
+      </h2>
+
+      <p id="pendingInfo">
+        รายการที่รอ Admin ตรวจสอบสลิป
+      </p>
 
     </div>
 
 
     <!-- APPLICATION LIST -->
+
     <div id="list"></div>
+
 
   </section>
 
 </main>
 
 
-<!-- SUPABASE -->
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
-<!-- PROJECT CONFIG -->
 <script src="config.js"></script>
 
-<!-- ADMIN SCRIPT -->
 <script src="admin.js"></script>
 
+
 </body>
+
 </html>
